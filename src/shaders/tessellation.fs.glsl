@@ -38,8 +38,8 @@ const float PATCH_EDGE_WIDTH = 0.5f;
 void main()
 {
 	// TODO
-    float h = (height + 16)/64.0f;
-	FragColor = vec4(h, h, h, 1.0);
+    float h = (attribIn.height + 16)/64.0f;
+	FragColor = vec4(h,h,h,1.0);
     
-    
+
 }

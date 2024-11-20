@@ -23,7 +23,7 @@ vec4 interpole( vec4 v0, vec4 v1, vec4 v2, vec4 v3 )
 {
     // mix( x, y, f ) = x * (1-f) + y * f.
     // TODO
-    mix()
+    return v0;
 }
 
 
@@ -77,5 +77,5 @@ void main()
 
     // // ----------------------------------------------------------------------
     // // output patch point position in clip space
-    // gl_Position = mvp * p;
+    //gl_Position = mvp * p;
 }
