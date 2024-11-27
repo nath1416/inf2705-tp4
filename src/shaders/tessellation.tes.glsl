@@ -45,7 +45,7 @@ void main()
     // Pour mettre en [-32, 32]
     vec4 height = texture(heighmapSampler, textCoords.xy);
     attribOut.height = height.r;
-    textCoords = attribOut.height * 64 - 32;
+    textCoords.y = attribOut.height * 64 - 32;
     attribOut.texCoords = clampedTextCoords.xy;
     attribOut.patchDistance = vec4(gl_TessCoord.xy, 1.0 - gl_TessCoord.xy);
 
