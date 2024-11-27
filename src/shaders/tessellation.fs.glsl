@@ -41,7 +41,7 @@ void main()
     // float h = (attribIn.height + 16)/64.0f;
 	// FragColor = vec4(h,h,h,1.0);
     
-    if(attribIn.height  < 0.3){
+    if(attribIn.height < 0.3){
         FragColor = texture(sandSampler, attribIn.texCoords);
     } else if(attribIn.height < 0.35){
         // TODO: interpolation entre les textures
