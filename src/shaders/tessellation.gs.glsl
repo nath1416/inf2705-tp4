@@ -43,6 +43,5 @@ void main() {
         EmitVertex();
     }
 
-    // End the primitive
     EndPrimitive();
 }
