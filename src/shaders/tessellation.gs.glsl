@@ -17,10 +17,6 @@ out ATTRIB_GS_OUT {
 } attribOut;
 
 void main() {
-    vec3 v0 = gl_in[0].gl_Position.xyz;
-    vec3 v1 = gl_in[1].gl_Position.xyz;
-    vec3 v2 = gl_in[2].gl_Position.xyz;
-
     vec3 bc0 = vec3(1.0, 0.0, 0.0);
     vec3 bc1 = vec3(0.0, 1.0, 0.0);
     vec3 bc2 = vec3(0.0, 0.0, 1.0);
