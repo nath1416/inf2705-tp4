@@ -40,7 +40,14 @@ void main()
     vec4 p3 = gl_in[3].gl_Position;
 
     vec4 textCoords = interpole(p0, p1, p2, p3);
-    vec4 clampedTextCoords = clamp(textCoords, 0.0, 1.0) / 4.0;
+    vec4 clampedTextCoords = ((textCoords + 128) / 256) / 4.0;
 
-    
+    // Pour mettre en [-32, 32]
+    vec4 height = texture(heighmapSampler, textCoords.xy);
+    attribOut.height = height.r;
+    textCoords = attribOut.height * 64 - 32;
+    attribOut.texCoords = clampedTextCoords.xy;
+    attribOut.patchDistance = vec4(gl_TessCoord.xy, 1.0 - gl_TessCoord.xy);
+
+    gl_Position = mvp * textCoords;
 }
