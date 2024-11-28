@@ -37,22 +37,20 @@ const float PATCH_EDGE_WIDTH = 0.5f;
 
 void main()
 {
-	// TODO
-    // float h = (attribIn.height + 16)/64.0f;
-	// FragColor = vec4(h,h,h,1.0);
-    
-    if(attribIn.height < 0.3){
+    // TODO: interpolation entre les textures
+    if(attribIn.height < 0.3) {
         FragColor = texture(sandSampler, attribIn.texCoords);
-    } else if(attribIn.height < 0.35){
-        // TODO: interpolation entre les textures
+    } else if(attribIn.height < 0.35) {
+        vec4 texture1 = texture(sandSampler, attribIn.texCoords);
+        vec4 texture2 = texture(groundSampler, attribIn.texCoords);
+        FragColor = mix(texture1, texture2, (attribIn.height - 0.3)/0.05);
+    } else if(attribIn.height < 0.6) {
         FragColor = texture(groundSampler, attribIn.texCoords);
-    }else if(attribIn.height < 0.6){
-        FragColor = texture(groundSampler, attribIn.texCoords);
-    }else if(attribIn.height < 0.65){
-        // TODO: interpolation entre les textures
-        FragColor = texture(snowSampler, attribIn.texCoords);
+    } else if(attribIn.height < 0.65) {
+        vec4 texture1 = texture(groundSampler, attribIn.texCoords);
+        vec4 texture2 = texture(snowSampler, attribIn.texCoords);
+        FragColor = mix(texture1, texture2, (attribIn.height - 0.6)/0.05);
     } else {
         FragColor = texture(snowSampler, attribIn.texCoords);
     }
-
 }

@@ -7,7 +7,6 @@ in Attribs {
     vec4 couleur;
 } AttribsIn[];*/
 
-
 out ATTRIB_TES_OUT
 {
     float height;
@@ -45,10 +44,10 @@ void main()
     // Pour mettre en [-32, 32]
     float height = texture(heighmapSampler, clampedTextCoords).x;
     attribOut.height = height;
-    attribOut.texCoords = clampedTextCoords.xy * 2.0;
+    attribOut.texCoords = gl_TessCoord.xy * 2.0;
     attribOut.patchDistance = vec4(gl_TessCoord.xy, 1.0 - gl_TessCoord.xy);
     
-    textCoords.y = attribOut.height * 64 - 32;
+    textCoords.y += attribOut.height * 64 - 32;
 
     gl_Position = mvp * textCoords;
 }
