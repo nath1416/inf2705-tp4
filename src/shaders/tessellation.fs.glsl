@@ -38,6 +38,7 @@ const float PATCH_EDGE_WIDTH = 0.5f;
 void main()
 {
     // TODO: interpolation entre les textures
+
     if(attribIn.height < 0.3) {
         FragColor = texture(sandSampler, attribIn.texCoords);
     } else if(attribIn.height < 0.35) {
@@ -52,5 +53,12 @@ void main()
         FragColor = mix(texture1, texture2, (attribIn.height - 0.6)/0.05);
     } else {
         FragColor = texture(snowSampler, attribIn.texCoords);
+    }
+    
+    if (viewWireframe) {
+        float wireframeEdgeFactor = edgeFactor(attribIn.barycentricCoords, WIREFRAME_WIDTH);
+        float patchEdgeFactor = edgeFactor(attribIn.patchDistance, PATCH_EDGE_WIDTH);
+        FragColor = vec4(mix(WIREFRAME_COLOR, FragColor.rgb, wireframeEdgeFactor), FragColor.a);
+        FragColor = vec4(mix(PATCH_EDGE_COLOR, FragColor.rgb, patchEdgeFactor), FragColor.a);
     }
 }

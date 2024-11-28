@@ -19,10 +19,10 @@ void main()
     vec4 p11 = gl_in[2].gl_Position; // 1,1
     vec4 p01 = gl_in[3].gl_Position; // 0,1
 
-    float dist1 = length(modelView[3] * ((p01 + p00) / 2));
-    float dist2 = length(modelView[3] * ((p00 + p10) / 2));
-    float dist3 = length(modelView[3] * ((p10 + p11) / 2));
-    float dist4 = length(modelView[3] * ((p01 + p11) / 2));
+    float dist1 = length(modelView * ((p01 + p00) / 2));
+    float dist2 = length(modelView * ((p00 + p10) / 2));
+    float dist3 = length(modelView * ((p10 + p11) / 2));
+    float dist4 = length(modelView * ((p01 + p11) / 2));
 
     float mixFactor1 = clamp( (dist1 - MIN_DIST) / (MAX_DIST - MIN_DIST), 0.0f, 1.0f );
     float mixFactor2 = clamp( (dist2 - MIN_DIST) / (MAX_DIST - MIN_DIST), 0.0f, 1.0f );
