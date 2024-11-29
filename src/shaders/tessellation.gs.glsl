@@ -26,15 +26,7 @@ void main() {
         attribOut.texCoords = attribIn[i].texCoords;
         attribOut.patchDistance = attribIn[i].patchDistance;
         attribOut.barycentricCoords = vec3(0.0, 0.0, 0.0); 
-
-        if (i == 0) {
-            attribOut.barycentricCoords = bc0;
-        } else if (i == 1) {
-            attribOut.barycentricCoords = bc1;
-        } else if (i == 2) {
-            attribOut.barycentricCoords = bc2;
-        }
-
+        attribOut.barycentricCoords[i] = 1.0;
         gl_Position = gl_in[i].gl_Position;
         EmitVertex();
     }
