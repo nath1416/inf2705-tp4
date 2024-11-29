@@ -42,7 +42,9 @@ SceneParticles::SceneParticles(bool& isMouseMotionEnabled)
     // TODO
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
-    for (int i = 0; i < 5; i++) glEnableVertexAttribArray(i);
+    for (int i = 0; i < 5; i++) {
+        glEnableVertexAttribArray(i);
+    }
 
     glGenBuffers(2, m_vbo);
 

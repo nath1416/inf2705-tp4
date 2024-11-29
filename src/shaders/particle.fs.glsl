@@ -14,4 +14,5 @@ in ATTRIB_GS_OUT
 void main()
 {
     // TODO
+    FragColor = attribIn.color * texture(textureSampler, attribIn.texCoords);
 }
