@@ -97,6 +97,7 @@ void SceneParticles::run(Window& w)
 
     // TODO: buffer binding
     // TODO: Draw particles without depth write and with blending
+    
 
     if (m_cumulativeTime > 1.0f / 60.0f)
     {

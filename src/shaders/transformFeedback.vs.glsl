@@ -59,4 +59,17 @@ const vec3 ACCELERATION = vec3(0.0f, 0.1f, 0.0f);
 void main()
 {
     // TODO   
+    if(time - timeToLive > MAX_TIME_TO_LIVE) {
+        positionMod = randomInCircle(INITIAL_RADIUS, INITIAL_HEIGHT);
+        velocityMod = vec3(0.0f, random() * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN, 0.0f);
+        colorMod = vec4(mix(YELLOW_COLOR, ORANGE_COLOR, random()), INITIAL_ALPHA);
+        sizeMod = vec2(0.0f);
+        timeToLiveMod = MAX_TIME_TO_LIVE * random();
+    } else {
+        positionMod = position + velocity * dt;
+        velocityMod = velocity + ACCELERATION * dt;
+        colorMod = color;
+        sizeMod = size;
+        timeToLiveMod = timeToLive - dt;
+    }
 }
