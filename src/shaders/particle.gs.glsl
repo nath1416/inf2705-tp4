@@ -21,4 +21,17 @@ uniform mat4 projection;
 void main()
 {
     // TODO
+    ivec4 indices = ivec4(0, 1, 2, 3);
+    for (int i = 0; i < 4; i++)
+    {
+        int index = indices[i];
+        vec4 pos = gl_in[0].gl_Position;
+        pos.x += (i & 1) * attribIn[0].size.x;
+        pos.y += (i & 2) * attribIn[0].size.y;
+        gl_Position = projection * pos;
+        attribOut.color = attribIn[0].color;
+        attribOut.texCoords = vec2((i & 1), (i & 2));
+        EmitVertex();
+    }
+    EndPrimitive();
 }

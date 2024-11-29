@@ -40,11 +40,28 @@ SceneParticles::SceneParticles(bool& isMouseMotionEnabled)
     glEnable(GL_PROGRAM_POINT_SIZE);
     
     // TODO
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
+    for (int i = 0; i < 5; i++) glEnableVertexAttribArray(i);
+
+    glGenBuffers(2, m_vbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(particles), particles, GL_DYNAMIC_COPY);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(particles), nullptr, GL_DYNAMIC_COPY);
+
+    glGenTransformFeedbacks(1, &m_tfo);
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_tfo);
 }
 
 SceneParticles::~SceneParticles()
 {
     // TODO
+    glDeleteBuffers(2, m_vbo);
+    glDeleteVertexArrays(1, &m_vao);
+    glDeleteTransformFeedbacks(1, &m_tfo);
 }
 
 void SceneParticles::run(Window& w)
