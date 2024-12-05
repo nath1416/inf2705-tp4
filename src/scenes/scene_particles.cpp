@@ -120,6 +120,8 @@ void SceneParticles::run(Window& w)
 
     // TODO: buffer binding
     glBindVertexArray(m_vao);
+    glUniform1f(m_timeLocationTransformFeedback, time);
+    glUniform1f(m_dtLocationTransformFeedback, dt);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const void*)offsetof(Particle, position));
