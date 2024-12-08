@@ -56,20 +56,50 @@ const vec3 DARK_RED_COLOR = vec3(0.1, 0.0, 0.0);
 
 const vec3 ACCELERATION = vec3(0.0f, 0.1f, 0.0f);
 
+// void main()
+// {
+//     float timeToLiveNorm = (time - timeToLive) / MAX_TIME_TO_LIVE;
+
+//     if(timeToLiveNorm < 0.0 || timeToLive > MAX_TIME_TO_LIVE)
+//     {
+//         // Reset to initial state
+//         positionMod = randomInCircle(INITIAL_RADIUS, INITIAL_HEIGHT);
+//         velocityMod = randomInCircle(INITIAL_SPEED_MIN, INITIAL_HEIGHT) * (1.0f - INITIAL_TIME_TO_LIVE_RATIO);
+//         colorMod = vec4(YELLOW_COLOR, INITIAL_ALPHA) * smoothstep(0.2, 1.0, timeToLiveNorm);
+//         sizeMod = vec2(size.x * random() * 1.5, size.y * random());
+//         timeToLiveMod = MAX_TIME_TO_LIVE;
+//     }
+//     else
+//     {
+//         // Update state
+//         positionMod = position + velocity * dt;
+//         velocityMod = velocity + ACCELERATION * dt;
+//         colorMod = vec4(YELLOW_COLOR, INITIAL_ALPHA) * smoothstep(0.2, 1.0, timeToLiveNorm);
+        
+//         float sizeFactor = 1.0f + (timeToLiveNorm - 0.3) / 0.7 * 0.5;
+//         sizeMod = vec2(size.x * sizeFactor, size.y);
+
+//         timeToLiveMod = timeToLive - dt;
+//     }
+// }
+
 void main()
 {
-    // TODO   
+
     if(time - timeToLive > MAX_TIME_TO_LIVE) {
+        // Init
         positionMod = randomInCircle(INITIAL_RADIUS, INITIAL_HEIGHT);
-        velocityMod = vec3(0.0f, random() * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN, 0.0f);
+        // velocityMod = vec3(0.0f, random() * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN, 0.0f);
+        velocityMod  = normalize(randomInCircle(0.5f, 5.0f)) * (random() * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN);
         colorMod = vec4(mix(YELLOW_COLOR, ORANGE_COLOR, random()), INITIAL_ALPHA);
-        sizeMod = vec2(0.0f);
-        timeToLiveMod = MAX_TIME_TO_LIVE * random();
+        sizeMod = size;
+        timeToLiveMod = time - dt;
     } else {
+        // Update
         positionMod = position + velocity * dt;
         velocityMod = velocity + ACCELERATION * dt;
         colorMod = color;
-        sizeMod = size;
+        sizeMod = size + vec2(0.1f, 0.1f) * dt;
         timeToLiveMod = timeToLive - dt;
     }
 }

@@ -50,14 +50,21 @@ SceneParticles::SceneParticles(bool& isMouseMotionEnabled)
     glGenBuffers(2, m_vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(particles), particles, GL_DYNAMIC_COPY);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Particle) * MAX_N_PARTICULES, particles, GL_DYNAMIC_COPY);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, position));
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(particles), nullptr, GL_DYNAMIC_COPY);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Particle) * MAX_N_PARTICULES, nullptr, GL_DYNAMIC_COPY);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, position));
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[1]);
+
 
     glGenTransformFeedbacks(1, &m_tfo);
     glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_tfo);
-    
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);   
  
 }
 
@@ -87,10 +94,15 @@ void SceneParticles::run(Window& w)
         m_nParticles = 1;
 
     m_transformFeedbackShaderProgram.use();
-    glUniform1f(m_timeLocationTransformFeedback, time);
-    glUniform1f(m_dtLocationTransformFeedback, dt);
     
     // TODO: buffer binding
+    glBindVertexArray(m_vao);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
+    glEnableVertexAttribArray(4);
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const void*)offsetof(Particle, position));
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const void*)(offsetof(Particle, velocity)));
@@ -101,8 +113,8 @@ void SceneParticles::run(Window& w)
     glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[1]);
     glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_tfo);
 
-    glUniformMatrix4fv(m_modelViewLocationParticle, 1, GL_FALSE, &modelView[0][0]);
-    glUniformMatrix4fv(m_projectionLocationParticle, 1, GL_FALSE, &projPersp[0][0]);
+    glUniform1f(m_timeLocationTransformFeedback, time);
+    glUniform1f(m_dtLocationTransformFeedback, dt);
 
     // TODO: update particles
     glEnable(GL_RASTERIZER_DISCARD);
@@ -112,16 +124,14 @@ void SceneParticles::run(Window& w)
     glDisable(GL_RASTERIZER_DISCARD);
 
 
-    // TODO: swap buffers
+    // // TODO: swap buffers
     std::swap(m_vbo[0], m_vbo[1]);
 
-    m_particuleShaderProgram.link();
+    m_particuleShaderProgram.use();
     m_flameTexture.use(0);
 
     // TODO: buffer binding
     glBindVertexArray(m_vao);
-    glUniform1f(m_timeLocationTransformFeedback, time);
-    glUniform1f(m_dtLocationTransformFeedback, dt);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const void*)offsetof(Particle, position));
@@ -133,7 +143,6 @@ void SceneParticles::run(Window& w)
        
     glUniformMatrix4fv(m_modelViewLocationParticle, 1, GL_FALSE, &modelView[0][0]);
     glUniformMatrix4fv(m_projectionLocationParticle, 1, GL_FALSE, &projPersp[0][0]);
-
 
     // TODO: Draw particles without depth write and with blending
     glDisable(GL_DEPTH_TEST);
@@ -207,13 +216,14 @@ void SceneParticles::initializeShader()
         m_transformFeedbackShaderProgram.attachShaderObject(vertex);
 
         // TODO 
-        // const char* vars[] = { "positionMod", "velocityMod", "colorMod", "sizeMod", "timeToLiveMod"};
-        // glTransformFeedbackVaryings(m_transformFeedbackShaderProgram, 5, vars, GL_SEPARATE_ATTRIBS);
+        const char* vars[] = { "positionMod", "velocityMod", "colorMod", "sizeMod", "timeToLiveMod"};
+        m_transformFeedbackShaderProgram.setTransformFeedbackVaryings( vars,5, GL_INTERLEAVED_ATTRIBS);
         
         m_transformFeedbackShaderProgram.link();
 
         m_timeLocationTransformFeedback = m_transformFeedbackShaderProgram.getUniformLoc("time");
         m_dtLocationTransformFeedback = m_transformFeedbackShaderProgram.getUniformLoc("dt");
+
     }
 }
 
