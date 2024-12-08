@@ -86,10 +86,10 @@ const vec3 ACCELERATION = vec3(0.0f, 0.1f, 0.0f);
 vec4 changeColor(float timeToLiveNorm)
 {
     if(timeToLiveNorm < 0.25){
-        return vec4(YELLOW_COLOR, ALPHA);
+        return vec4(YELLOW_COLOR, ALPHA) * smoothstep(0.2, 1.0, timeToLiveNorm);
     }
     if(timeToLiveNorm < 0.3){
-        return vec4(ORANGE_COLOR, INITIAL_ALPHA) * smoothstep(0.2, 1.0, timeToLiveNorm);
+        return vec4(ORANGE_COLOR, ALPHA) * smoothstep(0.2, 1.0, 1-timeToLiveNorm);
     }
     if(timeToLiveNorm < 0.5){
         return vec4(DARK_RED_COLOR, ALPHA);
@@ -107,7 +107,7 @@ void main()
         // Init
         positionMod = randomInCircle(INITIAL_RADIUS, INITIAL_HEIGHT);
         // velocityMod = vec3(0.0f, random() * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN, 0.0f);
-        velocityMod  = normalize(randomInCircle(0.5f, 5.0f)) * (random() * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN);
+        velocityMod  = normalize(randomInCircle(0.5f, 5.0f)) * ((random()  -0.5) * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN);
         colorMod = changeColor(1-timeToLiveNorm);
         sizeMod = vec2(size.x /2, size.y * random());
         timeToLiveMod = (random() * (MAX_TIME_TO_LIVE - 1.7f) + 1.7f) * INITIAL_TIME_TO_LIVE_RATIO;
