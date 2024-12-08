@@ -57,13 +57,8 @@ const vec3 DARK_RED_COLOR = vec3(0.1, 0.0, 0.0);
 const vec3 ACCELERATION = vec3(0.0f, 0.1f, 0.0f);
 
 float smoothCurve(float x) {
-    // Smoothly increase from 0.0 to 1.0 over [0.0, 0.2]
     float increase = smoothstep(0.0, 0.2, x);
-    
-    // Smoothly decrease from 1.0 to 0.0 over [0.8, 1.0]
     float decrease = smoothstep(0.8, 1.0, x);
-    
-    // Combine the two using multiplication to form the curve
     return increase * (1.0 - decrease);
 }
 
@@ -99,7 +94,6 @@ void main()
         // Update
         positionMod = position + velocity * dt;
         velocityMod = velocity + ACCELERATION * dt;
-        // colorMod = vec4(YELLOW_COLOR, INITIAL_ALPHA) * smoothstep(0.2, 1.0, timeToLiveNorm);
         colorMod = changeColor(1-timeToLiveNorm);
         sizeMod = size + vec2(0.1f, 0.1f) * dt;
         timeToLiveMod = timeToLive - dt;
