@@ -118,9 +118,13 @@ void SceneParticles::run(Window& w)
 
     // TODO: update particles
     glEnable(GL_RASTERIZER_DISCARD);
+
     glBeginTransformFeedback(GL_POINTS);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     glDrawArrays(GL_POINTS, 0, m_nParticles);
     glEndTransformFeedback();
+    glDisable(GL_BLEND);
     glDisable(GL_RASTERIZER_DISCARD);
 
 
@@ -146,8 +150,8 @@ void SceneParticles::run(Window& w)
 
     // TODO: Draw particles without depth write and with blending
     glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     glDrawArrays(GL_POINTS, 0, m_nParticles);
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
