@@ -56,32 +56,33 @@ const vec3 DARK_RED_COLOR = vec3(0.1, 0.0, 0.0);
 
 const vec3 ACCELERATION = vec3(0.0f, 0.1f, 0.0f);
 
-float smoothTransition(float x) {
-    // Apply smoothstep for the increase (0.0 to 0.2)
-    float increase = smoothstep(0.0, 0.8, x);
+float smoothCurve(float x) {
+    // Smoothly increase from 0.0 to 1.0 over [0.0, 0.2]
+    float increase = smoothstep(0.0, 0.2, x);
     
-    // Apply smoothstep for the decrease (0.8 to 1.0)
+    // Smoothly decrease from 1.0 to 0.0 over [0.8, 1.0]
     float decrease = smoothstep(0.8, 1.0, x);
     
-    // Combine the two using the formula smoothstep(x) * (1 - smoothstep(x))
+    // Combine the two using multiplication to form the curve
     return increase * (1.0 - decrease);
 }
 
+
 vec4 changeColor(float timeToLiveNorm)
 {
-    float alpha = smoothTransition(timeToLiveNorm);
+    float alpha = smoothCurve(timeToLiveNorm);
     
-    if(timeToLiveNorm < 0.25){
-        return vec4(YELLOW_COLOR, alpha)* mix(1.0, 0.0, smoothstep(0.2, 1.0, timeToLiveNorm));
+    if(timeToLiveNorm <= 0.25){
+        return vec4(YELLOW_COLOR* mix(1.0, 0.0, smoothstep(0.25, 1.0, timeToLiveNorm)), alpha);
     }
-    if(timeToLiveNorm < 0.3){
-        return vec4(ORANGE_COLOR, alpha) * mix(0.0, 1.0, smoothstep(0.2, 1.0, timeToLiveNorm));
+    if(timeToLiveNorm <= 0.3){
+        return vec4(ORANGE_COLOR * mix(0.0, 1.0, smoothstep(0.3, 1.0, timeToLiveNorm)), alpha);
     }
-    if(timeToLiveNorm < 0.5){
+    if(timeToLiveNorm <= 0.5){
         return vec4(ORANGE_COLOR, alpha);
     }
-    if(timeToLiveNorm < 1.0){
-        return vec4(DARK_RED_COLOR, alpha) * mix(1.0, 0.0, smoothstep(0.2, 1.0, timeToLiveNorm));
+    if(timeToLiveNorm <= 1.0){
+        return vec4(DARK_RED_COLOR * mix(1.0, 0.0, smoothstep(0.2, 1.0, timeToLiveNorm)), alpha);
     }
 }
 

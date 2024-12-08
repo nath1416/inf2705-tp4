@@ -110,6 +110,9 @@ void SceneParticles::run(Window& w)
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Particle), (const void*)(offsetof(Particle, size)));
     glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const void*)(offsetof(Particle, timeToLive)));
 
+    glUniformMatrix4fv(m_modelViewLocationParticle, 1, GL_FALSE, &modelView[0][0]);
+    glUniformMatrix4fv(m_projectionLocationParticle, 1, GL_FALSE, &projPersp[0][0]);
+
     glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[1]);
     glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_tfo);
 
@@ -147,6 +150,11 @@ void SceneParticles::run(Window& w)
        
     glUniformMatrix4fv(m_modelViewLocationParticle, 1, GL_FALSE, &modelView[0][0]);
     glUniformMatrix4fv(m_projectionLocationParticle, 1, GL_FALSE, &projPersp[0][0]);
+        glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[1]);
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_tfo);
+
+    glUniform1f(m_timeLocationTransformFeedback, time);
+    glUniform1f(m_dtLocationTransformFeedback, dt);
 
     // TODO: Draw particles without depth write and with blending
     glDisable(GL_DEPTH_TEST);
