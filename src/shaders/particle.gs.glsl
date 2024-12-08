@@ -24,8 +24,11 @@ void main()
     {
         vec4 pos = gl_in[0].gl_Position;
 
-        pos.x += (i % 2) * attribIn[0].size.x; 
-        pos.y += (i / 2) * attribIn[0].size.y; 
+        float halfSizeX = attribIn[0].size.x / 2.0;
+        float halfSizeY = attribIn[0].size.y / 2.0;
+
+        pos.x += ((i % 2) * 2.0 - 1.0) * halfSizeX; 
+        pos.y += ((i / 2) * 2.0 - 1.0) * halfSizeY;
 
         gl_Position = projection * pos;
 
