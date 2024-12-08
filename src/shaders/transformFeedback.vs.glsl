@@ -78,7 +78,6 @@ vec4 changeColor(float timeToLiveNorm)
     }
 }
 
-
 void main()
 {
     float timeToLiveNorm = timeToLive / MAX_TIME_TO_LIVE;
@@ -88,11 +87,11 @@ void main()
         velocityMod = normalize(randomInCircle(FINAL_RADIUS, FINAL_HEIGHT)) * mix(INITIAL_SPEED_MIN, INITIAL_SPEED_MAX, random());
         colorMod = vec4(YELLOW_COLOR, INITIAL_ALPHA);
         sizeMod = vec2(size.x / 2, size.y);
-        timeToLiveMod = mix(1.7 , MAX_TIME_TO_LIVE, random())  *INITIAL_TIME_TO_LIVE_RATIO;
+        timeToLiveMod = mix(MAX_TIME_TO_LIVE * INITIAL_TIME_TO_LIVE_RATIO, MAX_TIME_TO_LIVE, random());
     } else {
         // Update
         velocityMod = velocity + ACCELERATION * dt;
-        positionMod = position + velocityMod * dt;
+        positionMod = position + velocity * dt;
         colorMod = changeColor(1-timeToLiveNorm);
         sizeMod =  vec2(0.5, 1.0) * smoothstep(0.0, 1.0, 1-timeToLiveNorm) * 1.5;
         timeToLiveMod = timeToLive - dt;    
