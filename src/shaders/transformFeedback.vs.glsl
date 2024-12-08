@@ -58,7 +58,7 @@ const vec3 ACCELERATION = vec3(0.0f, 0.1f, 0.0f);
 
 // void main()
 // {
-//     float timeToLiveNorm = (time - timeToLive) / MAX_TIME_TO_LIVE;
+//     
 
 //     if(timeToLiveNorm < 0.0 || timeToLive > MAX_TIME_TO_LIVE)
 //     {
@@ -83,22 +83,40 @@ const vec3 ACCELERATION = vec3(0.0f, 0.1f, 0.0f);
 //     }
 // }
 
+vec4 changeColor(float timeToLive, float timeToLiveNorm)
+{
+    if(timeToLiveNorm < 0.25){
+        return vec4(YELLOW_COLOR, INITIAL_ALPHA);
+    }
+    if(timeToLiveNorm < 0.3){
+        return vec4(ORANGE_COLOR, INITIAL_ALPHA) * smoothstep(0.2, 1.0, timeToLiveNorm);
+    }
+    if(timeToLiveNorm < 0.5){
+        return vec4(DARK_RED_COLOR, ALPHA);
+    }
+    if(timeToLiveNorm < 0.75){
+        return vec4(DARK_RED_COLOR, ALPHA) * smoothstep(0.2, 1.0, timeToLiveNorm);
+    }
+}
+
 void main()
 {
 
-    if(time - timeToLive > MAX_TIME_TO_LIVE) {
+    float timeToLiveNorm = (time - timeToLive) / MAX_TIME_TO_LIVE;
+    if(timeToLive < 0.0) {
         // Init
         positionMod = randomInCircle(INITIAL_RADIUS, INITIAL_HEIGHT);
         // velocityMod = vec3(0.0f, random() * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN, 0.0f);
         velocityMod  = normalize(randomInCircle(0.5f, 5.0f)) * (random() * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN);
-        colorMod = vec4(mix(YELLOW_COLOR, ORANGE_COLOR, random()), INITIAL_ALPHA);
-        sizeMod = size;
-        timeToLiveMod = time - dt;
+        colorMod = changeColor(timeToLive,  timeToLiveNorm);
+        sizeMod = vec2(size.x /2, size.y * random());
+        timeToLiveMod = (random() * (MAX_TIME_TO_LIVE - 1.7f) + 1.7f) * INITIAL_TIME_TO_LIVE_RATIO;
     } else {
         // Update
         positionMod = position + velocity * dt;
         velocityMod = velocity + ACCELERATION * dt;
-        colorMod = color;
+        // colorMod = vec4(YELLOW_COLOR, INITIAL_ALPHA) * smoothstep(0.2, 1.0, timeToLiveNorm);
+        colorMod = changeColor(timeToLive,  timeToLiveNorm);
         sizeMod = size + vec2(0.1f, 0.1f) * dt;
         timeToLiveMod = timeToLive - dt;
     }

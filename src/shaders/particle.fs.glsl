@@ -15,5 +15,9 @@ void main()
 {
     // TODO
     // FragColor = attribIn.color * texture(textureSampler, attribIn.texCoords);
-    FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    if(attribIn.color.a < 0.05)
+    {
+        discard;
+    }
+    FragColor = vec4(attribIn.color.rgb, 1.0);
 }
