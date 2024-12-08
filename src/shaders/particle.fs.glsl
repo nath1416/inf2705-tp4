@@ -19,5 +19,4 @@ void main()
     {
         discard;
     }
-    // FragColor = attribIn.color;
 }

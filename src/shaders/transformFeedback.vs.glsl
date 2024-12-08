@@ -71,20 +71,18 @@ float smoothCurve(float x) {
 vec4 changeColor(float timeToLiveNorm)
 {
     float alpha = smoothCurve(timeToLiveNorm);
-    
-    if(timeToLiveNorm <= 0.25){
-        return vec4(YELLOW_COLOR* mix(1.0, 0.0, smoothstep(0.25, 1.0, timeToLiveNorm)), alpha);
-    }
-    if(timeToLiveNorm <= 0.3){
-        return vec4(ORANGE_COLOR * mix(0.0, 1.0, smoothstep(0.3, 1.0, timeToLiveNorm)), alpha);
-    }
-    if(timeToLiveNorm <= 0.5){
+
+    if (timeToLiveNorm <= 0.25) {
+        return vec4(YELLOW_COLOR * mix(1.0, 0.0, timeToLiveNorm), alpha);
+    } else if (timeToLiveNorm <= 0.3) {
+        return vec4(mix(YELLOW_COLOR, ORANGE_COLOR, smoothstep(0.25, 0.3, timeToLiveNorm)), alpha);
+    } else if (timeToLiveNorm <= 0.5) {
         return vec4(ORANGE_COLOR, alpha);
-    }
-    if(timeToLiveNorm <= 1.0){
-        return vec4(DARK_RED_COLOR * mix(1.0, 0.0, smoothstep(0.2, 1.0, timeToLiveNorm)), alpha);
+    } else {
+        return vec4(mix(ORANGE_COLOR, DARK_RED_COLOR, smoothstep(0.5, 1.0, timeToLiveNorm)), alpha);
     }
 }
+
 
 void main()
 {

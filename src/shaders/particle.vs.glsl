@@ -20,5 +20,4 @@ void main()
     gl_Position = modelView * vec4(position, 1.0);
     attribOut.color = color;
     attribOut.size = size;
-    // gl_Position = vec4(vec3(0), 1.0);
 }
