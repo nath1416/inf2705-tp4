@@ -123,8 +123,8 @@ void SceneParticles::run(Window& w)
     glEnable(GL_RASTERIZER_DISCARD);
 
     glBeginTransformFeedback(GL_POINTS);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDrawArrays(GL_POINTS, 0, m_nParticles);
     glEndTransformFeedback();
     glDisable(GL_BLEND);
@@ -150,7 +150,7 @@ void SceneParticles::run(Window& w)
        
     glUniformMatrix4fv(m_modelViewLocationParticle, 1, GL_FALSE, &modelView[0][0]);
     glUniformMatrix4fv(m_projectionLocationParticle, 1, GL_FALSE, &projPersp[0][0]);
-        glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[1]);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[1]);
     glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_tfo);
 
     glUniform1f(m_timeLocationTransformFeedback, time);
@@ -158,8 +158,8 @@ void SceneParticles::run(Window& w)
 
     // TODO: Draw particles without depth write and with blending
     glDisable(GL_DEPTH_TEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDrawArrays(GL_POINTS, 0, m_nParticles);
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);

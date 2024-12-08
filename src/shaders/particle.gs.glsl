@@ -30,7 +30,7 @@ void main()
         gl_Position = projection * pos;
 
         attribOut.color = attribIn[0].color;
-        attribOut.texCoords = vec2(i % 2, i / 2); 
+        attribOut.texCoords = vec2(i % 2, i / 2);
         
         EmitVertex();
     }

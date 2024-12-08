@@ -68,13 +68,17 @@ vec4 changeColor(float timeToLiveNorm)
     float alpha = smoothCurve(timeToLiveNorm);
 
     if (timeToLiveNorm <= 0.25) {
-        return vec4(YELLOW_COLOR * mix(1.0, 0.0, timeToLiveNorm), alpha);
+        return vec4(YELLOW_COLOR * mix(0, 0.25, timeToLiveNorm), alpha);
     } else if (timeToLiveNorm <= 0.3) {
         return vec4(mix(YELLOW_COLOR, ORANGE_COLOR, smoothstep(0.25, 0.3, timeToLiveNorm)), alpha);
     } else if (timeToLiveNorm <= 0.5) {
         return vec4(ORANGE_COLOR, alpha);
-    } else {
+    } else if(timeToLiveNorm <= 1) {
         return vec4(mix(ORANGE_COLOR, DARK_RED_COLOR, smoothstep(0.5, 1.0, timeToLiveNorm)), alpha);
+    }
+    else {
+        return vec4(YELLOW_COLOR * mix(0, 0.25, timeToLiveNorm), alpha);
+        
     }
 }
 
@@ -86,16 +90,16 @@ void main()
     if(timeToLive < 0.0) {
         // Init
         positionMod = randomInCircle(INITIAL_RADIUS, INITIAL_HEIGHT);
-        velocityMod  = normalize(randomInCircle(0.5f, 5.0f)) * ((random()  -0.5) * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN);
+        velocityMod = normalize(randomInCircle(0.5f, 5.0f)) * ((random()) * (INITIAL_SPEED_MAX - INITIAL_SPEED_MIN) + INITIAL_SPEED_MIN);
         colorMod = vec4(YELLOW_COLOR, INITIAL_ALPHA);
-        sizeMod = vec2(size.x /2, size.y * random());
+        sizeMod = vec2(size.x /2, size.y);
         timeToLiveMod = (random() * (MAX_TIME_TO_LIVE - 1.7f) + 1.7f) * INITIAL_TIME_TO_LIVE_RATIO;
     } else {
         // Update
         positionMod = position + velocity * dt;
         velocityMod = velocity + ACCELERATION * dt;
         colorMod = changeColor(1-timeToLiveNorm);
-        sizeMod = size + vec2(0.1f, 0.1f) * dt;
+        sizeMod =  vec2(0.5, 1.0) * smoothstep(0.0, 1.0, 1-timeToLiveNorm) * 1.5;
         timeToLiveMod = timeToLive - dt;
     }
 }
