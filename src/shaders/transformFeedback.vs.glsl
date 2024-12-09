@@ -84,16 +84,16 @@ void main()
     if(timeToLive < 0.0) {
         // Init
         positionMod = randomInCircle(INITIAL_RADIUS, INITIAL_HEIGHT);
-        velocityMod = normalize(randomInCircle(FINAL_RADIUS, FINAL_HEIGHT)) * mix(INITIAL_SPEED_MIN, INITIAL_SPEED_MAX, random());
+        velocityMod = normalize(randomInCircle(FINAL_RADIUS - INITIAL_RADIUS, FINAL_HEIGHT - INITIAL_HEIGHT)) * mix(INITIAL_SPEED_MIN, INITIAL_SPEED_MAX, random());
         colorMod = vec4(YELLOW_COLOR, INITIAL_ALPHA);
-        sizeMod = vec2(size.x / 2, size.y);
+        sizeMod = vec2(0.5, 1.0);
         timeToLiveMod = mix(MAX_TIME_TO_LIVE * INITIAL_TIME_TO_LIVE_RATIO, MAX_TIME_TO_LIVE, random());
     } else {
         // Update
         velocityMod = velocity + ACCELERATION * dt;
         positionMod = position + velocity * dt;
         colorMod = changeColor(1-timeToLiveNorm);
-        sizeMod =  vec2(0.5, 1.0) * smoothstep(0.0, 1.0, 1-timeToLiveNorm) * 1.5;
+        sizeMod =  vec2(0.5, 1.0) * (smoothstep(0.0, 1.0, 1-timeToLiveNorm) * 0.5 + 1);
         timeToLiveMod = timeToLive - dt;    
     }
 }
